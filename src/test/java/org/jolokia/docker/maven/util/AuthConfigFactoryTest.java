@@ -41,8 +41,10 @@ public class AuthConfigFactoryTest {
         String result = authConfig.toHeaderValue();
         String decoded = new String(Base64.decodeBase64(result));
 
-        Assert.assertTrue(decoded.contains("123456789987654321=="));
+        Assert.assertTrue(decoded.contains("b2F1dGgyOmVkYjEyMzcyLTRjYzItNDU5Yy1iNWMyLWM3YTNlMDExMGQyMg=="));
         Assert.assertTrue(decoded.contains("no-mail-required@example.org"));
+        Assert.assertTrue(decoded.contains("oauth2"));
+        Assert.assertTrue(decoded.contains("edb12372-4cc2-459c-b5c2-c7a3e0110d22"));
     }
 
     static class TestAuthConfigFactory extends AuthConfigFactory {
