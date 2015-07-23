@@ -29,7 +29,7 @@ available goals are described below.
 <plugin>
   <groupId>org.jolokia</groupId>
   <artifactId>docker-maven-plugin</artifactId>
-  <version>0.12.0</version>
+  <version>0.13.2</version>
 
   <configuration>
      ....
@@ -123,8 +123,12 @@ parentheses.
   images. See [Registry handling](#registry-handling) for details. 
 * **autoPull** (`docker.autoPull`)
   By default external images (base image for building or images to
-  start) are downloaded automatically. With this options this can be
-  switched off by setting this value to `false`.
+  start) are downloaded automatically if they don't exist locally.
+  With this options this can be switched off by setting this value to `off`.
+  Checking for a newer version of an image and downloading it if it
+  exists can be forced by setting this value to `always`. This will force an image 
+  to be always pulled. This is true for any base image during build and for any image 
+  during run which has no `<build>` section. Valid values are `on|off|always`.
 * **authConfig** holds the authentication information when pulling from
   or pushing to Docker registry. There is a dedicated
   [section](#authentication) for how doing security.
@@ -252,6 +256,10 @@ of an image configuration. The available subelements are
 * **tags** contains a list of additional `tag` elements with which an
   image is to be tagged after the build.
 * **maintainer** specifies the author (MAINTAINER) field for the generated image
+* **run** specifies commands to be run during the build process. It contains **run** elements 
+  which are passed to bash. The run commands are inserted right after the assembly but before **workdir** in to the
+  Dockerfile. This tag is not to be confused with the `<run>` section for this image which specifies the runtime
+  behaviour when starting containers. 
 
 From this configuration this Plugin creates an in-memory Dockerfile,
 copies over the assembled files and calls the Docker daemon via its
@@ -536,8 +544,6 @@ The `<run>` configuration knows the following sub elements:
 * **wait** specifies condition which must be fulfilled for the startup
   to complete. See [below](#wait-during-startup-and-shutdown) which subelements are
   available and how they can be specified.
-* **watch** enables the image watch See [below](#watching-for-image-changes) which sub elements are
-  available and how they can be specified.
 * **workingDir** (*v1.11*) working dir for commands to run in
 
 Example:
@@ -698,6 +704,9 @@ DB_PORT_5432_TCP_PORT=5432
 DB_PORT_5432_TCP_ADDR=172.17.0.5
 ```
 
+If you wish to link to existing containers not managed by the plugin, you may do so by specifying the container name
+obtained via `docker ps` in the configuration.
+
 ##### Volume binding
 
 A container can bind (or "mount") volumes from various source when starting up: Either from a directory of
@@ -739,6 +748,9 @@ should even work for boot2docker:
   </bind>
 </volumes>
 ````
+
+If you wish to mount volumes from an existing container not managed by the plugin, you may do by specifying the container name
+obtained via `docker ps` in the configuration.
 
 ##### Container restart policy
 
@@ -1026,7 +1038,7 @@ This goals uploads images to the registry which have a `<build>`
 configuration section. The images to push can be restricted with with
 the global option `image` (see
 [Global Configuration](#global-configuration) for details). The
-registry to push is by default `registry.hub.docker.com` but can be
+registry to push is by default `docker.io` but can be
 specified as part of the images's `name` name the Docker
 way. E.g. `docker.test.org:5000/data:1.5` will push the image `data`
 with tag `1.5` to the registry `docker.test.org` at port
@@ -1262,7 +1274,7 @@ This plugin supports various ways of specifying a registry:
 * If the image name contains a registry part, this registry is used
   unconditionally and can not be overwritten from the outside.
 * If an image name doesn't contain a registry, then by default the
-  default Docker registry `registry.hub.docker.com` is used for push and pull
+  default Docker registry `docker.io` is used for push and pull
   operations. But this can be overwritten through various means:
   - If the `<image>` configuration contains a `<registry>` subelement
     this registry is used.
@@ -1353,7 +1365,7 @@ the Maven settings file `~/.m2/settings.xml`:
 ```xml
 <servers>
   <server>
-    <id>registry.hub.docker.com</id>
+    <id>docker.io</id>
     <username>jolokia</username>
     <password>s!cr!t</password>
   </server>
@@ -1362,8 +1374,12 @@ the Maven settings file `~/.m2/settings.xml`:
 ```
 
 The server id must specify the registry to push to/pull from, which by
-default is central index `registry.hub.docker.com`. Here you should add
-you docker.io account for your repositories.
+default is central index `docker.io` (or `index.docker.io` / `registry.hub.docker.com` as fallbacks). 
+Here you should add your docker.io account for your repositories. If you have multiple accounts 
+for the same registry, the second user can be specified as part of the ID. In the example above, if you 
+have a second accorunt 'rhuss' then use an `<id>docker.io/rhuss</id>` for this second entry. I.e. add the 
+username with a slash to the id name. The default without username is only taken if no server entry with 
+a username appended id is chosen.
 
 #### Password encryption
 

@@ -1,5 +1,23 @@
 # ChangeLog
 
+* **0.13.2**
+  - "run" directives can be added to the Dockerfile (#191)
+  - Support user information in wait URL (#211)
+  - Stop started container in case of an error during startup (#217)
+  - Allow linking to external containers (#195)
+  - Allow volume mounting from external containers (#73)
+  
+* **0.13.1**
+  - Allow autoPull to be forced on docker:build and docker:start (#96)
+  - Respect username when looking up credentials for a Docker registry (#174)
+  - Add "force=1" to push for Fedora/CentOs images allowing to push to docker hub
+  
+Note that the default registry has been changed to `docker.io` as docker hub doesn't use 
+`registry.hub.docker.com` as the default registry and refused to authenticate against this 
+registry. For backward compatibility reasons `registry.hub.docker.com`, `index.docker.io` and 
+`docker.io` can be used as a server id in `~/.m2/settings.xml` for the default credentials for
+pushing without registry to Docker hub.
+
 * **0.13.0**
   - Add `docker:watch` (#187) 
   - Allow `extraHosts` IPs to be resolved at runtime (#196)
