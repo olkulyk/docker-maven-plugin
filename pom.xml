@@ -11,7 +11,7 @@
     </parent>
   <groupId>org.zalando.stups.org.jolokia</groupId>
   <artifactId>docker-maven-plugin</artifactId>
-  <version>0.13.3-zal-1</version>
+  <version>0.13.3-zal-2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>maven-docker-plugin</name>
@@ -274,7 +274,7 @@
     <url>https://github.com/zalando-stups/docker-maven-plugins</url>
     <connection>scm:git:https://github.com/zalando-stups/docker-maven-plugin.git</connection>
     <developerConnection>scm:git:https://github.com/zalando-stups/docker-maven-plugin.git</developerConnection>
-    <tag>0.13.3-zal-1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>
