@@ -42,6 +42,7 @@
     <jmockit.version>1.10</jmockit.version>
     <jacoco.version>0.7.1.201405082137</jacoco.version>
     <maven.version>3.2.3</maven.version>
+    <license.skip>true</license.skip>
   </properties>
 
   <dependencies>
