@@ -1,1 +1,1 @@
-{"https://docker.registry.example.org": {"email": "no-mail-required@example.org", "auth": "b2F1dGgyOmVkYjEyMzcyLTRjYzItNDU5Yy1iNWMyLWM3YTNlMDExMGQyMg=="}}
+{"auths": {"https://docker.registry.example.org": {"email": "no-mail-required@example.org", "auth": "b2F1dGgyOmVkYjEyMzcyLTRjYzItNDU5Yy1iNWMyLWM3YTNlMDExMGQyMg=="}}}

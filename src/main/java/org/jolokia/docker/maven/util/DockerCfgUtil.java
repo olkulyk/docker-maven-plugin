@@ -29,6 +29,7 @@ import com.google.common.collect.Maps;
 class DockerCfgUtil {
 
     private static final String EMPTY_STRING = "";
+    private static final String AUTHS_NODE = "auths";
     private static Splitter AUTH_SPLITTER = Splitter.on(":").omitEmptyStrings().trimResults();
 
     private final File userDockerCfgFile;
@@ -45,7 +46,14 @@ class DockerCfgUtil {
         if (userDockerCfgFile.exists()) {
             try {
 
-                JSONObject data = new JSONObject(new String(Files.readAllBytes(Paths.get(userDockerCfgFile.toURI()))));
+                JSONObject root = new JSONObject(new String(Files.readAllBytes(Paths.get(userDockerCfgFile.toURI()))));
+
+                if (!root.has(AUTHS_NODE)) {
+                    return null;
+                }
+
+                JSONObject data = root.getJSONObject(AUTHS_NODE);
+
                 String registryName = getRegistryKey(data, registry);
                 if (EMPTY_STRING.equals(registryName)) {
 

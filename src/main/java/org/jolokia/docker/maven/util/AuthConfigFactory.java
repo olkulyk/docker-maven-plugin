@@ -200,6 +200,6 @@ public class AuthConfigFactory {
 
     protected File getUserDockerConfigFile() {
         String userHomeDirectory = System.getProperty("user.home");
-        return new File(userHomeDirectory, ".dockercfg");
+        return new File(userHomeDirectory, ".docker/config.json");
     }
 }
